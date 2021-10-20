@@ -6,3 +6,5 @@ scripts/
 .travis.yml
 package-lock.json
 .npmrc
+docs/
+src/

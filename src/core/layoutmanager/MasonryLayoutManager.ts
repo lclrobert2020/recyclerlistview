@@ -63,14 +63,17 @@ export class MasonryLayoutManager extends LayoutManager {
     // NOTE: This method could be called multiple times.
     public relayoutFromIndex(startIndex: number, itemCount: number): void {
         let lowestColumnIdx = 0;
-
-        const startVal: Layout = this.layouts[startIndex];
+        let startIndex1 = startIndex === 0? 0: startIndex-1;
+        const startVal: Layout = this.layouts[startIndex1];
         if (startVal) {
-            this.totalHeight = startVal.y;
+            // this.totalHeight = startVal.y;
+            if(startVal.y && startVal.height){
+                this.totalHeight = this.totalHeight > startVal.y+startVal.height? this.totalHeight: startVal.y+startVal.height;
+            }
             lowestColumnIdx = startVal.columnIdx ? startVal.columnIdx : this.getColumnOf(startVal);
         }
 
-        const lowestColumnArray = this.getPrevLowestColumns(startIndex);
+        const lowestColumnArray = this.getPrevLowestColumns(startIndex1);
 
         const oldItemCount = this.layouts.length;
         const itemDim = { height: 0, width: 0 };
@@ -78,7 +81,7 @@ export class MasonryLayoutManager extends LayoutManager {
         let oldLayout: Layout;
         let itemY: number;
 
-        for (let i = startIndex; i < itemCount; i++) {
+        for (let i = startIndex1; i < itemCount; i++) {
             oldLayout = this.layouts[i];
             const layoutType = this.getTypeCallback(i);
             if (
